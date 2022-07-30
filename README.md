@@ -2,10 +2,12 @@
 
 This repository contains a reference implementation of pairwise interacting surface
 activity coefficient (SAC) equations.
-These is an accompanying paper showing the derivation of all equations used (link to be provided after publication).
+There is an accompanying paper showing the derivation of all equations used (link to be provided after publication).
 
 All the relevant SAC equations are implemented in the [pysac.py module](./pysac.py)
 favoring readability over efficiency.
+The base code is not dependent on how the surface interaction energies are actually calculated and
+then it can be adapted to work as a COSMO-RS/SAC, F-SAC, COSMO-SAC-Phi, etc. implementation.
 
 ## Interactive notebooks
 
@@ -41,3 +43,10 @@ This should start the notebook app and open your web browser so that you can run
 
 Another option is simply to open the project directory with [Visual Studio Code](https://code.visualstudio.com/) and install the suggested Python extensions.
 
+## Other related projects
+
+The reader might be also interested in the following related projects:
+ - [LVPP sigma profile database](https://github.com/lvpp/sigma)
+ - [Benchmark COSMO-SAC implementation](https://github.com/usnistgov/COSMOSAC)
+ - [openCOSMO-RS_cpp](https://github.com/TUHH-TVT/openCOSMO-RS_cpp)
+ - [openCOSMO-RS_py](https://github.com/TUHH-TVT/openCOSMO-RS_py)
