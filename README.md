@@ -4,7 +4,7 @@ This repository contains a reference implementation of pairwise interacting surf
 activity coefficient (SAC) equations.
 These is an accompanying paper showing the derivation of all equations used (link to be provided after publication).
 
-All the relevant SAC equations are implemented in the [pairs.py module](./pairs.py)
+All the relevant SAC equations are implemented in the [pysac.py module](./pysac.py)
 favoring readability over efficiency.
 
 ## Interactive notebooks
