@@ -21,6 +21,8 @@ interactive notebooks:
 - [Study on the interaction probabylities of a size-symmetric mixture](./notebook/prob_symmetric.ipynb)
 - [Study on the interaction probabylities of a size-asymmetric mixture](./notebook/prob_asymetric.ipynb)
 - [Study on the interaction probabylities of a nearly ideal mixture](./notebook/prob_nearly_ideal.ipynb)
+- [Excess properties with temperature dependent interaction energies](./notebook/fsac_ft.ipynb)
+- [Numerical check for excess energy with temperature dependent interaction energies](./notebook/fsac_u_check.ipynb)
 
 ## Running on your machine
 
