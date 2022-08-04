@@ -1,4 +1,5 @@
 # Pairwise interacting surface activity coefficient, reference implementation in Python
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6962631.svg)](https://doi.org/10.5281/zenodo.6962631)
 
 This repository contains a reference implementation of pairwise interacting surface
 activity coefficient (SAC) equations.
