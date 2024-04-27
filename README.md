@@ -1,12 +1,13 @@
 # Pairwise interacting surface activity coefficient, reference implementation in Python
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6962631.svg)](https://doi.org/10.5281/zenodo.6962631)
 [![DOI:10.1016/j.fluid.2022.113611](http://img.shields.io/badge/DOI-10.1016/j.fluid.2022.113611-B31B1B.svg)](https://doi.org/10.1016/j.fluid.2022.113611)
+[![DOI:10.1016/j.fluid.2024.114113](http://img.shields.io/badge/DOI-10.1016/j.fluid.2024.114113-B31B1B.svg)](https://doi.org/10.1016/j.fluid.2024.114113)
 
 This repository contains a reference implementation of pairwise interacting surface
 activity coefficient (SAC) equations.
 There are two accompanying papers showing the derivation of all equations used:
  - [Ref. 1 - Beyond activity coefficients with pairwise interacting surface (COSMO-type) models](https://doi.org/10.1016/j.fluid.2022.113611).
- - Ref. 2 - Unraveling Order and Entropy with Modern Quasi-Chemical Models (submitted for publication).
+ - [Ref. 2 - Unraveling Order and Entropy with Modern Quasi-Chemical Models](https://doi.org/10.1016/j.fluid.2024.114113).
 
 All the relevant SAC equations are implemented in the [pysac.py module](./pysac.py)
 favoring readability over efficiency.
@@ -62,6 +63,7 @@ Another option is simply to open the project directory with [Visual Studio Code]
 
 The reader might be also interested in the following related projects:
  - [LVPP sigma profile database](https://github.com/lvpp/sigma)
+ - [JCOSMO package](https://www.ufrgs.br/lvpp/2023/09/22/jcosmo-download)
  - [Benchmark COSMO-SAC implementation](https://github.com/usnistgov/COSMOSAC)
  - [openCOSMO-RS_cpp](https://github.com/TUHH-TVT/openCOSMO-RS_cpp)
  - [openCOSMO-RS_py](https://github.com/TUHH-TVT/openCOSMO-RS_py)
