@@ -4,7 +4,9 @@
 
 This repository contains a reference implementation of pairwise interacting surface
 activity coefficient (SAC) equations.
-There is an accompanying paper showing the derivation of all equations used [available here](https://doi.org/10.1016/j.fluid.2022.113611).
+There are two accompanying papers showing the derivation of all equations used:
+ - [Ref. 1 - Beyond activity coefficients with pairwise interacting surface (COSMO-type) models](https://doi.org/10.1016/j.fluid.2022.113611).
+ - Ref. 2 - Unraveling Order and Entropy with Modern Quasi-Chemical Models (submitted for publication).
 
 All the relevant SAC equations are implemented in the [pysac.py module](./pysac.py)
 favoring readability over efficiency.
@@ -14,7 +16,9 @@ then it can be adapted to work as a COSMO-RS/SAC, F-SAC, COSMO-SAC-Phi, etc. imp
 ## Interactive notebooks
 
 In addition to the SAC equations implementation, there are many [jupyter](https://jupyter.org/)
-interactive notebooks:
+interactive notebooks.
+
+Notebooks related to Ref. 1:
  - [List all microstates for a given number of segments](./notebook/microstates.ipynb)
  - [Nonrandom factors for a five compund mixture](./notebook/five_compounds.ipynb)
  - [Excess properties for a size-symmetric nonideal mixture](./notebook/ue_symmetric_direct.ipynb)
@@ -26,6 +30,13 @@ interactive notebooks:
 - [Excess properties with temperature dependent interaction energies](./notebook/fsac_ft.ipynb)
 - [Numerical check for excess energy with temperature dependent interaction energies](./notebook/fsac_u_check.ipynb)
 
+Notebooks related to Ref. 2:
+ - [Model polar/inert system](./notebook/egner_polar_inert.ipynb)
+ - [Model hydrogen bonding/inert system](./notebook/egner_hb_inert.ipynb)
+ - [Excess properties for the chloroform/methanol mixture](./notebook/chloroform_methanol.ipynb)
+ - [Excess properties for the n-butanol/n-hexane mixture](./notebook/butanol_hexane.ipynb)
+ - [Excess properties for the tetrahydrofuran/water mixture](./notebook/tetrahydrofuran_water.ipynb)
+ 
 ## Running on your machine
 
 ### Requirements

@@ -83,7 +83,7 @@ class SAC:
             # Calculating the compound total areas
             for m in range(len(Q[i])):
                 self.q[i] += Q[i][m]
-            # Calculating the area fractions for pure compounds (theta_pure, Eq. 28)
+            # Calculating the area fractions for pure compounds (theta_pure, Eq. 28 of Ref. 1)
             for m in range(len(self.theta_pure[i])):
                 self.theta_pure[i][m] = Q[i][m]/self.q[i]
 
@@ -116,7 +116,7 @@ class SAC:
                 for m in range(len(self.Q[i])):
                     for n in range(len(self.Q[j])):
                         u_ij[m][n] = self.calc_u(T, i, j, m, n)
-                        # These are the Boltzmann factors, Eq. 2
+                        # These are the Boltzmann factors, Eq. 2 of Ref. 1
                         psi_ij[m][n] = math.exp(-u_ij[m][n] * self.inv_RT)
 
         # Converge the pure compound segment gammas, they depend only on temperature
@@ -135,7 +135,7 @@ class SAC:
         q_avg = 0
         for i in range(self.ncomps):
             q_avg += z[i] * self.q[i]
-        # Calculate theta for the mixture, Eq. 6
+        # Calculate theta for the mixture, Eq. 6 of Ref. 1
         for i in range(self.ncomps):
             for m in range(len(self.Q[i])):
                 self.theta[i][m] = z[i] * self.Q[i][m] / q_avg
@@ -163,7 +163,7 @@ class SAC:
                 ln_seg_gamma_pure = math.log(self.seg_gamma_pure[i][m])
                 nu_i_m = Q_i[m]/self.Q_eff
 
-                # Compound activities, Eq. 27
+                # Compound activities, Eq. 27 of Ref. 1
                 ln_gamma[i] += nu_i_m * (ln_seg_gamma - ln_seg_gamma_pure)
 
         return ln_gamma
@@ -171,7 +171,7 @@ class SAC:
     
     def __solve_gamma(self, for_pure, theta, seg_gamma):
         '''
-        Method to solve the "self-consistency" equation (Eq. 10) by successive substitution.
+        Method to solve the "self-consistency" equation (Eq. 10 of Ref. 1) by successive substitution.
 
         This method should not be called directly by the user.
 
@@ -189,7 +189,7 @@ class SAC:
                 seg_gamma_i = seg_gamma[i]
                 
                 for m in range(len(seg_gamma_i)):
-                    # The sum we need to invert in Eq 10
+                    # The sum we need to invert in Eq 10 of Ref. 1
                     theta_gamma_psi_sum = 0.0
 
                     for j in range(self.ncomps):
@@ -211,7 +211,7 @@ class SAC:
                             else:
                                 theta_gamma_psi_sum += theta_j[n] * seg_gammaj[n] * psi_mn
 						
-                    # succesive substitution according to Eq. 10 damped with the latest value
+                    # succesive substitution according to Eq. 10 of Ref. 1 damped with the latest value
                     seg_gamma_i[m] = (seg_gamma_i[m] + 1.0/theta_gamma_psi_sum)/2
 
                     # calculate a norm2 with our gamma's to check the convergence
@@ -321,11 +321,11 @@ class SAC:
                     u_ij = self.u[i][j]
 
                     for n in range(len(theta_j)):
-                        # Eq. 7
+                        # Eq. 7 of Ref. 1
                         theta_mn = theta_i[m]*seg_gamma_i[m] * theta_j[n]*seg_gamma_j[n] * psi_ij[m][n]
                         du_dT = self.calc_du_dT(self.T, i, j, m, n)
 
-                        # Eq. 35 (see also Eq. 32)
+                        # Eq. 35  of Ref. 1 (see also Eq. 32)
                         u += nu/2 * theta_mn * (u_ij[m][n] - self.T*du_dT)
         
         return u * self.inv_RT
@@ -350,3 +350,114 @@ class SAC:
                         alpha[i][j][m][n] = seg_gamma_i[m]*seg_gamma_j[n]*psi_ij[m][n]
         
         return alpha
+    
+    def get_nonrandom_pure(self, i):
+        '''
+        Returns the nonrandom factors for every segment pair.
+        '''
+        alpha = deepcopy(self.psi)
+        for i in range(self.ncomps):
+            seg_gamma_i = self.seg_gamma_pure[i]
+            theta_i = self.theta_pure[i]
+            for j in range(self.ncomps):
+                for m in range(len(seg_gamma_i)):
+                    seg_gamma_j = self.seg_gamma_pure[j]
+                    theta_j = self.theta_pure[j]
+
+                    psi_ij = self.psi[i][j]
+
+                    for n in range(len(theta_j)):
+                        # Eq. 8 of Ref. 1
+                        alpha[i][j][m][n] = seg_gamma_i[m]*seg_gamma_j[n]*psi_ij[m][n]
+        
+        return alpha
+    
+    def get_entropy_pure(self, i):
+        '''
+        Returns the residual entropy (divided by R) for the pure compound i.
+        '''
+        si = 0
+        seg_gamma_i = self.seg_gamma_pure[i]
+        theta_i = self.theta_pure[i]
+        nu_i = self.q[i]/self.Q_eff
+        
+        for j in range(self.ncomps):
+            if i!=j:
+                continue # it is pure, only i==j matters
+
+            for m in range(len(seg_gamma_i)):
+                theta_j = self.theta_pure[j]
+                seg_gamma_j = self.seg_gamma_pure[j]
+                psi_ij = self.psi[i][j]
+
+                for n in range(len(theta_j)):
+                    du_dT = self.calc_du_dT(self.T, i, j, m, n)
+
+                    # Eq. 7 of Ref. 1
+                    theta_mn = theta_i[m]*seg_gamma_i[m] * theta_j[n]*seg_gamma_j[n] * psi_ij[m][n]
+
+                    # Eq. 8 of Ref. 1
+                    alpha_mn = seg_gamma_i[m] * seg_gamma_j[n] * psi_ij[m][n]
+
+                    # Eq. 11 of Ref. 2
+                    si -= nu_i/2 * theta_mn * (math.log(alpha_mn) + du_dT / RGAS )
+        
+        return si
+    
+    def get_entropy(self):
+        '''
+        Returns the entropy (divided by R) for the mixture.
+        '''
+        nu = self.q_avg/self.Q_eff
+        s = 0
+
+        for i in range(self.ncomps):
+            theta_i = self.theta[i]
+            seg_gamma_i = self.seg_gamma[i]
+
+            for j in range(self.ncomps):
+                theta_j = self.theta[j]
+                seg_gamma_j = self.seg_gamma[j]
+                psi_ij = self.psi[i][j]
+
+                for m in range(len(theta_i)):
+                    for n in range(len(theta_j)):
+                        du_dT = self.calc_du_dT(self.T, i, j, m, n)
+
+                        # Eq. 7 of Ref. 1
+                        theta_mn = theta_i[m]*seg_gamma_i[m] * theta_j[n]*seg_gamma_j[n] * psi_ij[m][n]
+
+                        # Eq. 8 of Ref. 1
+                        alpha_mn = seg_gamma_i[m] * seg_gamma_j[n] * psi_ij[m][n]
+
+                        # Eq. 11 of Ref. 2
+                        s -= nu/2 * theta_mn * (math.log(alpha_mn) + du_dT / RGAS )
+        
+        return s
+
+    def get_helmholtz2(self):
+        '''
+        Returns the Helmnotz (divided by RT) for the mixture, calculated with theta_mn.
+        '''
+        nu = self.q_avg/self.Q_eff
+        a = 0
+
+        for i in range(self.ncomps):
+            theta_i = self.theta[i]
+            seg_gamma_i = self.seg_gamma[i]
+
+            for j in range(self.ncomps):
+                theta_j = self.theta[j]
+                seg_gamma_j = self.seg_gamma[j]
+                psi_ij = self.psi[i][j]
+
+
+                for m in range(len(theta_i)):
+                    for n in range(len(theta_j)):
+                        # Eq. 7 of Ref. 1
+                        theta_mn = theta_i[m]*seg_gamma_i[m] * theta_j[n]*seg_gamma_j[n] * psi_ij[m][n]
+
+                        # Eq. 8 of Ref. 2
+                        a += nu/2 * theta_mn * math.log(seg_gamma_i[m] * seg_gamma_j[n])
+        
+        return a
